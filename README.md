@@ -2,6 +2,24 @@
 # Ruby (Sinatra) vs PHP (Limonade) Memory Usage comparison
 
 
+# UPDATE (2010-03-27)
+
+Thanks to [binary42](http://github.com/binary42/) who pm'd me with some notes about using `ps ...` being expensive, I did
+the benchmarking tests again with the memory usage checks turned off in both apps, and got widely different results:
+
+    ab -n 2000 -c 20 http://__URL__/
+
+
+Ruby/Sinatra/Apache/Passenger: **603 requests/sec**
+
+PHP/Limonade/Apache: **323.85 requests/sec**
+
+but the big winner is:
+
+Ruby/Sinatra/Thin(1.2.7): **1747.20** requests/sec or **1987.36** requests/sec (in production mode)
+
+--------
+
 ## IMPORTANT ! PLEASE TAKE NOTE !  
 
 This is in **no way** intended as a pro / against either Ruby or PHP. 
@@ -9,7 +27,7 @@ This is in **no way** intended as a pro / against either Ruby or PHP.
 **SO PLEASE DON'T USE IT AS SUCH!** Thanks
 
 
---
+-----
 
 ### Background:
 
@@ -196,7 +214,9 @@ The reason behind this is to hopefully find the answer to these two simple quest
 
 # 1.  WHY IS THE MEMORY USAGE SEEMINGLY SO MUCH HIGHER IN THE Ruby (Sinatra) APP THAN IN THE PHP (Limonade) APP ??
 
-# 2.  WHY IS THE PHP (Limonade) APP 3.77 x FASTER THAN THE Ruby (Sinatra) APP ??
+# <del>2.  WHY IS THE PHP (Limonade) APP 3.77 x FASTER THAN THE Ruby (Sinatra) APP ??</del> ANSWERED
+
+**Answer:**  slowness in Ruby/Sinatra app was **due to expensive shell-ing out action**, once removed **the Ruby/Sinatra app is almost twice as fast as the PHP app**. See update notes at top of page.
 
 
 If you know the answers to these questions, or could explain things for me please do so!
